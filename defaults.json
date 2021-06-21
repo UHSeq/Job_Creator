@@ -1,0 +1,9 @@
+{"job-name": "job",
+"output": null,
+"error": null,
+"mail-user": null,
+"mail-type": null,
+"time": "72:00:00",
+"nodes": "1",
+"cpus-per-node": "20",
+"mem": "20gb"}
