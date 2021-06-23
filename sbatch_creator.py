@@ -14,6 +14,9 @@ rdemod = r'\s+\(D\)'
 front3 = r'^\s{3}'
 modbreaks = r'\s+'
 rmodname = r'(\w+\-?\w+?\/\S+|R\/\S+)'
+env_1 = r'source /home/${USER}/.bashrc'
+env_2 = r'source activate '
+# env_2 = r'source activate '
 
 class Job:
     def __init__(self):
@@ -24,8 +27,16 @@ class Job:
         self.load_modules()
         self.check_header_settings()
         self.add_modules()
+        self.add_environment()
         self.lastline()
         self.print_to_shell()
+
+    def add_environment(self):
+        env_add = input("Do you need to set a Python environment? [y/n]: ")
+        if re.match('y', env_add):
+            print(f'Input the Python Enivronment\n{env_1}')
+            mod_add = input(f'{env_2}:')
+            self.env = [env_1, env_2 + mod_add]
 
     def add_modules(self):
         module_add = input("Do you want to add modules? [y/n]: ")
@@ -37,8 +48,6 @@ class Job:
                 if re.match('y', finish):
                     choosing = False
                     print(self.modules)
-        elif re.match('n', module_add):
-            pass
 
     def adjust_header_settings(self):
         print("##Remember to not leave any whitespaces##")
@@ -127,6 +136,9 @@ class Job:
             shell.write('\n\n')
             for mod in self.modules:
                 shell.write(f'module load {mod}\n')
+            # shell.write(self.env)
+            for env in self.env:
+                shell.write(f'{env}\n')
             shell.write(f'\n{self.lastline}')
 
     def print_keyvalue_to_terminal(self, att, value):
